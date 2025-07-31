@@ -27,13 +27,14 @@ def parse(raw_input):
     return aunts
 
 
-def get_score(aunt):
+def get_score(aunt, part2=False):
     score = 0
     for key,val in aunt.items():
-        if key in ['trees', 'cats']:
-            score += 1 if val > MATCH.get(key) else 0
-        elif key in ['pomeranians', 'goldfish']:
-            score += 1 if val < MATCH.get(key) else 0
+        if part2 and key in ['trees', 'cats', 'pomeranians', 'goldfish']:
+            if key in ['trees', 'cats']:
+                score += 1 if val > MATCH.get(key) else 0
+            elif key in ['pomeranians', 'goldfish']:
+                score += 1 if val < MATCH.get(key) else 0
         else:
             score += 1 if MATCH.get(key) == val else 0
     return score
@@ -48,9 +49,16 @@ def part1(raw_input):
         if score > best_score:
             best_score = score
             best_match = num
-    print(f'best score = {best_score}')
     return best_match
 
 
 def part2(raw_input):
-    pass
+    aunts = parse(raw_input)
+    best_match = None
+    best_score = 0
+    for num, aunt in enumerate(aunts, start=1):
+        score = get_score(aunt, part2=True)
+        if score > best_score:
+            best_score = score
+            best_match = num
+    return best_match
