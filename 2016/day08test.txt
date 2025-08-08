@@ -1,0 +1,6 @@
+rect 1x1
+rotate row y=0 by 5
+rotate column x=5 by 1
+rotate column x=5 by 2
+rotate column x=5 by 3
+rotate column x=5 by 4
