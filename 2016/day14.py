@@ -69,6 +69,5 @@ def part1(salt, stretch=False):
     return list(keys.keys())[-1]
 
 
-
 def part2(salt):
     return part1(salt,stretch=True)
