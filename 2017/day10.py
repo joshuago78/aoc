@@ -2,7 +2,6 @@ from functools import reduce
 
 
 SIZE = 256
-#SIZE = 16
 
 
 def print_nums(nums, start, stop):
