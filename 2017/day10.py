@@ -49,7 +49,7 @@ def part2(raw_input):
     dense_hash = ''
     for i in range(16):
         chunk = nums[i*16:i*16+16]
-        dense_hash += f'{reduce(lambda x,y: x^y, chunk):x}'
+        dense_hash += f'{reduce(lambda x,y: x^y, chunk):0{2}x}'
     return dense_hash
 
 
