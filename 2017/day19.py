@@ -38,11 +38,8 @@ def part1(raw_input, part2=False):
     direction = 'down'
     while direction is not None:
         direction = move(grid, visited, direction)
-    if part2:
-        return len(visited)
-    return ''.join([c[2] for c in visited if c[2].isalpha()])
+    return len(visited) of part2 else ''.join([c[2] for c in visited if c[2].isalpha()])
 
 
 def part2(raw_input):
     return part1(raw_input, part2=True)
-    
