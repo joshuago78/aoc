@@ -9,15 +9,23 @@ class Point(object):
         self.vx = int(args['vx'])
         self.vy = int(args['vy'])
 
-    def __str__(self):
-        return '#'
+    def move(self, factor=1):
+        self.x += self.vx * factor
+        self.y += self.vy * factor
 
     def in_frame(self):
         return self.x>=0 and self.y>=0
 
-    def move(self, factor=1):
-        self.x += self.vx * factor
-        self.y += self.vy * factor
+    def check_edges(self, maxx, maxy, minx, miny):
+        if self.x > maxx:
+            maxx = self.x
+        elif minx is None or self.x < minx:
+            minx = self.x
+        if self.y > maxy:
+            maxy = self.y
+        elif miny is None or self.y < miny:
+            miny = self.y
+        return maxx,maxy,minx,miny
 
 
 def parse(text):
@@ -29,42 +37,44 @@ def parse(text):
     return points
 
 
-def build_grid(points, maxx, maxy):
+def build_grid(points, minx, maxx, miny, maxy):
     grid = [['.' for _ in range(maxx+1)] for _ in range(maxy+1)]
     for p in points:
-        grid[p.y][p.x] = p
-    return grid
+        grid[p.y][p.x] = '#'
+    return [row[minx:] for row in grid[miny:]]
 
 
 def print_grid(grid):
     for row in grid:
-        print(''.join([str(p) for p in row]))
+        print(''.join(row))
     print()
 
 
 def part1(text):
     points = parse(text)
-    printable = False
     seconds = 10000
     for p in points:
-        p.move(seconds)
+        p.move(factor=seconds)
+    area = None
+    printable = False
     while True:
         seconds += 1
         printable = True
-        maxx = 0
-        maxy = 0
+        maxx,maxy,minx,miny = 0,0,None,None
         for p in points:
             p.move()
             if printable:
                 if p.in_frame():
-                    if p.x > maxx:
-                        maxx = p.x
-                    if p.y > maxy:
-                        maxy = p.y
+                    maxx,maxy,minx,miny = p.check_edges(maxx,maxy,minx,miny)
                 else:
                     printable = False
         if printable:
-            grid = build_grid(points, maxx, maxy)
-            print_grid(grid)
-            print(f'time={seconds} seconds')
-            input()
+            new_area = (maxx-minx)*(maxy-miny)
+            if area is None:
+                area = new_area
+            elif new_area < area:
+                area = new_area
+                grid = build_grid(points, minx, maxx, miny, maxy)
+            else:
+                print_grid(grid)
+                return seconds
